@@ -16,11 +16,14 @@ func main() {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	reader := bufio.NewReader(os.Stdin)
 
+	color.Cyan("\n=== Игра 'Угадай число' ===")
+	fmt.Printf("Угадай число от 1 до 100 за 8 попыток!\n")
+
 	for {
 		PlayGame(r, 1, 100, reader)
 
 		if !AskForReplay(reader) {
-			color.Blue("Спасибо за игру! До свидания!")
+			color.Blue("\nСпасибо за игру! До свидания!")
 			break
 		}
 	}
@@ -32,13 +35,7 @@ func PlayGame(r *rand.Rand, min, max int, reader *bufio.Reader) {
 	cBlue := color.New(color.FgBlue)
 	cRed := color.New(color.FgRed)
 
-	fmt.Print("Хотите начать? (да/нет): ")
-	if answer, _ := reader.ReadString('\n'); strings.TrimSpace(answer) != "да" {
-		cRed.Println("До свидания!")
-		return
-	}
-
-	fmt.Printf("Загадываю число от %d до %d. У тебя 8 попыток!\n", min, max)
+	cBlue.Printf("\nЗагадываю число от %d до %d. У тебя 8 попыток!\n", min, max)
 
 	for i := 1; i <= 8; i++ {
 		fmt.Printf("Попытка %d/8: ", i)
@@ -47,13 +44,13 @@ func PlayGame(r *rand.Rand, min, max int, reader *bufio.Reader) {
 		choice, err := strconv.Atoi(strings.TrimSpace(input))
 
 		if err != nil {
-			fmt.Println("Введите число!")
+			fmt.Println("Ошибка! Введите число.")
 			i--
 			continue
 		}
 
 		if choice < min || choice > max {
-			fmt.Printf("Число должно быть между %d и %d!\n", min, max)
+			fmt.Printf("Число должно быть от %d до %d!\n", min, max)
 			i--
 			continue
 		}
